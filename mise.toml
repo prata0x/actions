@@ -1,0 +1,7 @@
+[tools]
+node = "24"
+# pnpm は npm backend で pin する。aqua backend は pnpm 11 の新しい配布形式
+# (pnpm-linux-x64.tar.gz) にレジストリ定義が未追従で `mise install` が失敗する
+# ため。npm backend は node 経由で確実に解決でき、版も packageManager フィールド
+# (package.json) と一致させる。
+"npm:pnpm" = "11"

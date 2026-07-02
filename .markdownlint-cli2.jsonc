@@ -1,0 +1,17 @@
+{
+  // ルール一覧: https://github.com/DavidAnson/markdownlint/blob/main/doc/Rules.md
+  "config": {
+    "default": true,
+
+    // MD013 line-length: 日本語文 / 長い URL / 英語パッケージ名混在で
+    // 誤検知が多いため無効化
+    "MD013": false,
+
+    // MD024 no-duplicate-heading: 異なる親セクション配下なら同名見出しを許容
+    "MD024": { "siblings_only": true },
+
+    // MD033 no-inline-html: 表組や <details> タグ等で必要なため許容
+    "MD033": false
+  },
+  "globs": ["**/*.md", "!**/node_modules/**"]
+}

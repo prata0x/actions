@@ -1,0 +1,29 @@
+{
+  "name": "actions",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "prepare": "husky",
+    "lint:md": "markdownlint-cli2",
+    "format": "prettier --write \"**/*.{yml,yaml,md,json}\"",
+    "format:check": "prettier --check \"**/*.{yml,yaml,md,json}\""
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^21.0.2",
+    "@commitlint/config-conventional": "^21.0.2",
+    "husky": "^9.1.7",
+    "lint-staged": "^17.0.7",
+    "markdownlint-cli2": "^0.22.1",
+    "prettier": "^3.6.2"
+  },
+  "packageManager": "pnpm@11.4.0",
+  "engines": {
+    "node": ">=24",
+    "pnpm": ">=11.0.0"
+  },
+  "lint-staged": {
+    "*.md": "markdownlint-cli2 --fix",
+    "*.{yml,yaml,json}": "prettier --write"
+  }
+}

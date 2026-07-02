@@ -1,0 +1,40 @@
+# CodeQL による継続的セキュリティスキャン(GitHub Actions ワークフロー / composite action)。
+# public リポジトリのため Code Scanning が無償提供され、SARIF が Security タブに乗る。
+# languages: actions は run: 内スクリプトや ${{ }} 式への信頼できない入力混入
+# (script injection)等、workflow 特有のデータフロー/taint を検出する。
+name: CodeQL
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  schedule:
+    - cron: "17 3 * * 1" # 毎週月曜 03:17 UTC
+
+permissions:
+  contents: read
+
+jobs:
+  analyze:
+    name: Analyze (actions)
+    runs-on: ubuntu-latest
+    permissions:
+      security-events: write # SARIF を Code Scanning へアップロードするため
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          persist-credentials: false
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@8aad20d150bbac5944a9f9d289da16a4b0d87c1e # v4.36.2
+        with:
+          languages: actions
+          queries: security-extended
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@8aad20d150bbac5944a9f9d289da16a4b0d87c1e # v4.36.2
+        with:
+          category: "/language:actions"

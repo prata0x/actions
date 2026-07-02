@@ -1,0 +1,73 @@
+# Lint + composite action のセルフテスト用ワークフロー。
+# public リポジトリのため GitHub Actions は無料 → GitHub-hosted の ubuntu-latest で実行する。
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+# 同一 ref への連続 push では古い run をキャンセルし、無駄な実行を避ける。
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          persist-credentials: false
+
+      # 全 workflow / composite action の uses: が 40 桁 commit SHA で pin されているか
+      # 横断検証する(未 pin があれば fail)。version 非依存のため lint job 側に置く。
+      - name: Verify all actions are SHA-pinned
+        run: |
+          unpinned=$(grep -rEn '^[[:space:]]*-?[[:space:]]*uses:' --include='*.yml' --include='*.yaml' . \
+            | grep -v '/node_modules/' \
+            | grep -vE 'uses:[[:space:]]*\./' \
+            | grep -vE '@[0-9a-fA-F]{40}([[:space:]]|$|#)' || true)
+          if [ -n "$unpinned" ]; then
+            echo "::error::Unpinned action(s) found — 40 桁 commit SHA で pin してください:"
+            echo "$unpinned"
+            exit 1
+          fi
+          echo "All actions are SHA-pinned."
+
+      - name: actionlint (workflow / action YAML の静的解析。shellcheck 込み)
+        uses: raven-actions/actionlint@3d39aea434753780c3b3d4a1a31c854b4dbf49d7 # v2.2.0
+        with:
+          version: 1.7.12
+
+      # setup-mise 自体のセルフテストを兼ねて、この action を実際に使って mise をセットアップする。
+      - name: Setup mise (dogfood ./setup-mise)
+        uses: ./setup-mise
+        with:
+          cache: "true"
+
+      - name: Verify setup-mise resolved the pinned version
+        run: |
+          got="$(mise --version | awk '{print $1}')"
+          want="2026.7.0"
+          if [ "$got" != "$want" ]; then
+            echo "::error::setup-mise resolved mise $got, expected $want"
+            exit 1
+          fi
+          echo "setup-mise resolved mise $got as expected."
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Lint Markdown
+        run: pnpm lint:md
+
+      - name: Format check (prettier)
+        run: pnpm format:check

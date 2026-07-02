@@ -1,0 +1,27 @@
+# --- サプライチェーン対策(個人プロジェクト共通の設定に準拠) ---
+
+# 新規公開されたパッケージバージョンを 7 日間 (10080 分) は解決しない。
+# 攻撃されたパッケージは多くが公開から数時間〜1日以内に削除されるため、
+# 時間バッファを設けて感染リスクを下げる。
+minimumReleaseAge: 10080
+
+# トランジティブ依存が git URL / tarball URL などレジストリ外ソースを
+# 使うのを禁止する。直接依存でのみ許可。
+blockExoticSubdeps: true
+
+# publish 時のトラストレベル (OIDC / provenance / 署名) が過去より
+# 低下している場合は拒否。アカウント乗っ取り早期検知に寄与。
+trustPolicy: no-downgrade
+
+# 未承認の build script があると install を失敗させる (fail-loud)。
+# 現時点で allowBuilds に載せるべき依存はない。
+strictDepBuilds: true
+
+# package.json の engines フィールドを厳格に強制する。
+engineStrict: true
+
+# peer dependency の過不足を失敗扱いにする。
+strictPeerDependencies: true
+
+# store 内容の改ざん検知 (デフォルト true だが明示)。
+verifyStoreIntegrity: true

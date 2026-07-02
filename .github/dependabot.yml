@@ -1,0 +1,49 @@
+# 依存自動更新。直接依存の更新を GitHub PR で受け取り、CI が pass したものだけマージする運用。
+# pnpm-workspace.yaml の supply-chain 監視 (minimumReleaseAge / blockExoticSubdeps /
+# trustPolicy 等) と合わせ、レジストリ汚染を時間バッファ + 自動 PR の二段で吸収する。
+# 週次 (毎週月曜) で開く。
+
+version: 2
+updates:
+  # npm (pnpm)
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+      time: "06:00"
+      timezone: Asia/Tokyo
+    open-pull-requests-limit: 10
+    versioning-strategy: increase
+    # pnpm-workspace.yaml の minimumReleaseAge (7 日) と整合。
+    cooldown:
+      default-days: 7
+    commit-message:
+      prefix: chore
+      include: scope
+    groups:
+      dev-dependencies:
+        dependency-type: development
+        update-types:
+          - minor
+          - patch
+
+  # GitHub Actions — setup-mise/action.yml が参照する jdx/mise-action の SHA 更新も
+  # ここで拾う(この PR が来たら version: の値もあわせて見直す)。
+  - package-ecosystem: github-actions
+    directory: /
+    cooldown:
+      default-days: 7
+    schedule:
+      interval: weekly
+      day: monday
+      time: "06:00"
+      timezone: Asia/Tokyo
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: chore
+      include: scope
+    groups:
+      ci-actions:
+        patterns:
+          - "*"
