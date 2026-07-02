@@ -16,7 +16,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  lint:
+  verify:
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -27,7 +27,7 @@ jobs:
           persist-credentials: false
 
       # 全 workflow / composite action の uses: が 40 桁 commit SHA で pin されているか
-      # 横断検証する(未 pin があれば fail)。version 非依存のため lint job 側に置く。
+      # 横断検証する(未 pin があれば fail)。version 非依存のため verify job 側に置く。
       - name: Verify all actions are SHA-pinned
         run: |
           unpinned=$(grep -rEn '^[[:space:]]*-?[[:space:]]*uses:' --include='*.yml' --include='*.yaml' . \
