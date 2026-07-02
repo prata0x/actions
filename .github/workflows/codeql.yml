@@ -22,6 +22,7 @@ jobs:
     permissions:
       security-events: write # SARIF を Code Scanning へアップロードするため
       contents: read
+      actions: read # CodeQL Action が workflow run 情報を参照するため必須
     steps:
       - name: Checkout
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
