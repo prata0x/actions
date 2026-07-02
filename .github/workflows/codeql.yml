@@ -1,7 +1,7 @@
 # CodeQL による継続的セキュリティスキャン(GitHub Actions ワークフロー / composite action)。
-# public リポジトリのため Code Scanning が無償提供され、SARIF が Security タブに乗る。
 # languages: actions は run: 内スクリプトや ${{ }} 式への信頼できない入力混入
 # (script injection)等、workflow 特有のデータフロー/taint を検出する。
+# Code Scanning は public リポジトリでのみ有効(private だと SARIF アップロードが fail する)。
 name: CodeQL
 
 on:

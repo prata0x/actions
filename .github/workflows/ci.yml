@@ -1,5 +1,4 @@
 # Lint + composite action のセルフテスト用ワークフロー。
-# public リポジトリのため GitHub Actions は無料 → GitHub-hosted の ubuntu-latest で実行する。
 name: CI
 
 on:
