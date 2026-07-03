@@ -9,8 +9,14 @@ on:
 permissions:
   contents: read
 
+# 同一 PR への連続 push では古い run をキャンセルし、無駄な実行を避ける。
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   dependency-review:
+    name: Dependency review
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
