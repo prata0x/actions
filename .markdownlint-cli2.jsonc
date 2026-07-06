@@ -13,5 +13,5 @@
     // MD033 no-inline-html: 表組や <details> タグ等で必要なため許容
     "MD033": false
   },
-  "globs": ["**/*.md", "!**/node_modules/**"]
+  "globs": ["**/*.md", "!**/node_modules/**", "!**/.claude/vendor/**"]
 }
