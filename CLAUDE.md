@@ -1,5 +1,9 @@
 # actions
 
+@.claude/vendor/universal.md
+@.claude/vendor/decision-making.md
+@.claude/vendor/engineering-conventions.md
+
 個人プロジェクト群向けの再利用可能な composite action 集。単一リポジトリ、単一パッケージ。
 
 ## 方針
@@ -22,10 +26,6 @@ pnpm install
 pnpm lint:md      # markdownlint
 pnpm format:check # prettier --check
 ```
-
-## コミット規約
-
-Conventional Commits(日本語 subject)。
 
 ## リリース
 
