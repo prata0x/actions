@@ -31,6 +31,12 @@ action に固定バージョンを1箇所だけ持ち、利用側は `uses:` の
     cache: "true"
 ```
 
+`github_token` は mise が GitHub の公開物を取得するときに api.github.com へ送る
+トークンで、既定は空。空なら、github.com で動くときは `github.token` を送り、
+Gitea など github.com 以外で動くときは何も送らず認証なしで取得する(そこの自動
+トークンは api.github.com では通らないため)。回数制限を避けたいときは、
+github.com の公開物だけを読めるトークンを渡す。
+
 mise のバージョンを上げる時は `setup-mise/action.yml` の `version:` を書き換えて
 タグを打つだけでよい。利用側リポジトリは Dependabot(github-actions) が
 `uses:` の SHA 更新 PR を自動で出す。
