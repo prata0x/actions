@@ -42,11 +42,6 @@ jobs:
           fi
           echo "All actions are SHA-pinned."
 
-      - name: actionlint (workflow / action YAML の静的解析。shellcheck 込み)
-        uses: raven-actions/actionlint@3d39aea434753780c3b3d4a1a31c854b4dbf49d7 # v2.2.0
-        with:
-          version: 1.7.12
-
       # setup-mise 自体のセルフテストを兼ねて、この action を実際に使って mise をセットアップする。
       - name: Setup mise (dogfood ./setup-mise)
         uses: ./setup-mise
@@ -62,6 +57,13 @@ jobs:
             exit 1
           fi
           echo "setup-mise resolved mise $got as expected."
+
+      # actionlint は mise で取得する。GitHub 専用の action (トークンを api.github.com に送り、
+      # actions/cache も使う) に頼らず、GitHub と Gitea のどちらでも同じ手順で動かすため。
+      # shellcheck も同じく mise で渡す。PATH になければ actionlint は run: の検査を黙って飛ばし、
+      # ランナーのイメージに入っているかは forge ごとに違う。
+      - name: actionlint (workflow / action YAML の静的解析。shellcheck 込み)
+        run: mise x aqua:rhysd/actionlint@1.7.12 aqua:koalaman/shellcheck@0.11.0 -- actionlint
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile

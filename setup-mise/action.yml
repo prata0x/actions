@@ -7,6 +7,13 @@ inputs:
     description: "jdx/mise-action の cache 入力をそのまま渡す"
     required: false
     default: "false"
+  github_token:
+    description: >-
+      mise が GitHub の公開物を取得するときに api.github.com へ送るトークン。
+      空なら、github.com で動くときは github.token を、それ以外 (Gitea など) では
+      何も送らず認証なしで取得する。
+    required: false
+    default: ""
 runs:
   using: "composite"
   steps:
@@ -20,3 +27,7 @@ runs:
       with:
         version: 2026.7.0
         cache: ${{ inputs.cache }}
+        # jdx/mise-action は github_token を MISE_GITHUB_TOKEN として api.github.com に送る。
+        # 既定の github.token は Gitea ではそのインスタンスのトークンになり、api.github.com
+        # では通らないので、github.com で動くときだけ渡す。
+        github_token: ${{ inputs.github_token || (github.server_url == 'https://github.com' && github.token) || '' }}
