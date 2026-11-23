@@ -60,8 +60,10 @@ jobs:
 
       # actionlint は mise で取得する。GitHub 専用の action (トークンを api.github.com に送り、
       # actions/cache も使う) に頼らず、GitHub と Gitea のどちらでも同じ手順で動かすため。
+      # shellcheck も同じく mise で渡す。PATH になければ actionlint は run: の検査を黙って飛ばし、
+      # ランナーのイメージに入っているかは forge ごとに違う。
       - name: actionlint (workflow / action YAML の静的解析。shellcheck 込み)
-        run: mise x aqua:rhysd/actionlint@1.7.12 -- actionlint
+        run: mise x aqua:rhysd/actionlint@1.7.12 aqua:koalaman/shellcheck@0.11.0 -- actionlint
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
