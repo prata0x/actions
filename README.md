@@ -1,7 +1,5 @@
 # actions
 
-[![CodeQL](https://github.com/prata0x/actions/actions/workflows/codeql.yml/badge.svg)](https://github.com/prata0x/actions/actions/workflows/codeql.yml)
-
 個人プロジェクト群で使い回す、再利用可能な composite action 集。
 
 ## セットアップ
@@ -37,7 +35,7 @@ Gitea など github.com 以外で動くときは何も送らず認証なしで�
 github.com の公開物だけを読めるトークンを渡す。
 
 mise のバージョンを上げる時は `setup-mise/action.yml` の `version:` を書き換えて
-タグを打つだけでよい。利用側リポジトリは Dependabot(github-actions) が
+タグを打つだけでよい。利用側リポジトリは Renovate が
 `uses:` の SHA 更新 PR を自動で出す。
 
 ## バージョニング
