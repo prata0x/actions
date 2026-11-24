@@ -1,6 +1,5 @@
 # actions
 
-[![CI](https://github.com/prata0x/actions/actions/workflows/ci.yml/badge.svg)](https://github.com/prata0x/actions/actions/workflows/ci.yml)
 [![CodeQL](https://github.com/prata0x/actions/actions/workflows/codeql.yml/badge.svg)](https://github.com/prata0x/actions/actions/workflows/codeql.yml)
 
 個人プロジェクト群で使い回す、再利用可能な composite action 集。
@@ -8,7 +7,7 @@
 ## セットアップ
 
 ```bash
-git clone git@github.com:prata0x/actions.git
+git clone https://git.fn0.net/discord-bots/actions.git
 cd actions
 pnpm install
 ```
